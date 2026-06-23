@@ -1,0 +1,12 @@
+# Back-end (Java / Maven)
+backend/target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Front-end (Node / React)
+frontend/node_modules/
+frontend/dist/
+
+# Arquivos de IDE
+.idea/
+.vscode/
+*.iml

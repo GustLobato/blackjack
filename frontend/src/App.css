@@ -1,0 +1,259 @@
+/* ============================================================
+   BlackJack - estilos do jogo
+   Organizado por secoes para ficar facil de explicar.
+   ============================================================ */
+
+/* ---------- 1. Base ---------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100vh;
+  /* fundo verde de mesa, com um brilho no topo (cobre a tela inteira) */
+  background: radial-gradient(circle at 50% -10%, #1b9e57 0%, #0c5e34 45%, #073d21 100%) no-repeat;
+  background-color: #073d21; /* cor base, evita qualquer area sem cor */
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  color: #ffffff;
+}
+
+/* ---------- 2. Container e titulo ---------- */
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  text-align: center;
+}
+
+.titulo {
+  font-size: 46px;
+  margin: 10px 0 24px;
+  letter-spacing: 1px;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- 3. Botoes ---------- */
+.botoes {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.btn {
+  padding: 12px 22px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-novo {
+  background: linear-gradient(180deg, #3fa45f, #2e7d44);
+}
+.btn-comprar {
+  background: linear-gradient(180deg, #f4cf4a, #e6ad00);
+  color: #3a2e00;
+}
+.btn-parar {
+  background: linear-gradient(180deg, #e8704a, #d0532c);
+}
+
+.btn:disabled {
+  background: #8a8a8a;
+  color: #dddddd;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ---------- 4. Mensagem de erro de conexao ---------- */
+.erro {
+  background-color: #c0392b;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* ---------- 5. Mesa ---------- */
+.mesa {
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 24px 20px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- 6. Mao (dealer / jogador) ---------- */
+.mao {
+  margin-bottom: 18px;
+}
+
+.mao-titulo {
+  font-size: 22px;
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* pontuacao em formato de "etiqueta" */
+.pontos {
+  display: inline-block;
+  min-width: 34px;
+  padding: 2px 10px;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+}
+
+/* linha que separa o dealer do jogador */
+.divisoria {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 8px auto 22px;
+  width: 80%;
+}
+
+/* ---------- 7. Cartas ---------- */
+.cartas {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.carta {
+  position: relative;
+  width: 80px;
+  height: 112px;
+  background: #ffffff;
+  color: #1a1a1a;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  animation: aparecer 0.25s ease;
+}
+
+/* copas e ouros */
+.carta.vermelha {
+  color: #d40000;
+}
+
+/* valor + naipe nos cantos da carta */
+.carta-canto {
+  position: absolute;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+.carta-canto.cima {
+  top: 7px;
+  left: 8px;
+}
+.carta-canto.baixo {
+  bottom: 7px;
+  right: 8px;
+  transform: rotate(180deg);
+}
+
+/* naipe grande no meio */
+.carta-centro {
+  font-size: 38px;
+}
+
+/* verso da carta (carta escondida do dealer) */
+.carta-virada {
+  background-color: #b01b2e;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.18) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.18) 0 6px, transparent 6px 12px);
+  border: 4px solid #ffffff;
+}
+
+/* animacao de "entrada" da carta */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- 8. Mensagem final do resultado ---------- */
+.mensagem {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 22px auto 4px;
+  padding: 14px;
+  border-radius: 10px;
+  max-width: 360px;
+}
+.mensagem.venceu { background: #2e8b3d; }
+.mensagem.perdeu { background: #c0392b; }
+.mensagem.empate { background: #6b7280; }
+
+/* ---------- 9. Historico das ultimas rodadas ---------- */
+.historico {
+  margin-top: 28px;
+  text-align: left;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.historico h3 {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.historico ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hist-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.22);
+  border-left: 5px solid #6b7280;
+  font-size: 15px;
+}
+
+.hist-ganhou { border-left-color: #36c95b; }
+.hist-perdeu { border-left-color: #e74c3c; }
+.hist-empate { border-left-color: #9aa0a6; }
+
+.hist-placar {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
