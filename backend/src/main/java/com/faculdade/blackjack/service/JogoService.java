@@ -6,19 +6,25 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.faculdade.blackjack.dto.EstadoJogo;
+import com.faculdade.blackjack.dto.RodadaDTO;
+import com.faculdade.blackjack.entity.ResultadoRodada;
 import com.faculdade.blackjack.model.Carta;
 import com.faculdade.blackjack.model.Jogo;
-import com.faculdade.blackjack.model.ResultadoRodada;
+import com.faculdade.blackjack.repository.ResultadoRodadaRepository;
 
-// Aqui ficam as regras do jogo. O Spring cria UMA instancia (singleton),
-// entao o jogo atual e o historico ficam guardados em memoria entre as chamadas.
+// Aqui ficam as regras do jogo. O Spring cria UMA instancia (singleton).
+// A partida atual fica em memoria; o historico de rodadas vai para o banco.
 @Service
 public class JogoService {
 
-    private static final int LIMITE_HISTORICO = 5;
+    // O Spring injeta o repositorio pelo construtor (injecao de dependencia)
+    private final ResultadoRodadaRepository historicoRepository;
 
     private Jogo jogo; // partida atual (null = nenhuma partida iniciada ainda)
-    private final List<ResultadoRodada> historico = new ArrayList<>();
+
+    public JogoService(ResultadoRodadaRepository historicoRepository) {
+        this.historicoRepository = historicoRepository;
+    }
 
     // POST /jogo/novo -> comeca uma partida nova
     public EstadoJogo novoJogo() {
@@ -63,6 +69,11 @@ public class JogoService {
         return montarEstado();
     }
 
+    // DELETE /jogo/historico -> apaga todas as rodadas do banco
+    public void limparHistorico() {
+        historicoRepository.deleteAll();
+    }
+
     private boolean emAndamento() {
         return jogo != null && "EM_ANDAMENTO".equals(jogo.getStatus());
     }
@@ -83,22 +94,19 @@ public class JogoService {
         }
     }
 
-    // Guarda a rodada terminada no historico (mais nova primeiro, no maximo 5)
+    // Salva a rodada terminada no banco (atraves do repositorio)
     private void registrarResultado() {
         ResultadoRodada rodada = new ResultadoRodada(
                 resultadoDoJogador(jogo.getStatus()),
                 jogo.getJogador().pontuacao(),
                 jogo.getDealer().pontuacao());
-        historico.add(0, rodada);
-        while (historico.size() > LIMITE_HISTORICO) {
-            historico.remove(historico.size() - 1);
-        }
+        historicoRepository.save(rodada);
     }
 
     // Monta a resposta enviada ao front-end
     private EstadoJogo montarEstado() {
         EstadoJogo estado = new EstadoJogo();
-        estado.setHistorico(historico);
+        estado.setHistorico(buscarHistorico());
 
         // Nenhuma partida iniciada ainda
         if (jogo == null) {
@@ -127,6 +135,19 @@ public class JogoService {
         }
 
         return estado;
+    }
+
+    // Busca as ultimas rodadas no banco e converte cada entidade em DTO
+    private List<RodadaDTO> buscarHistorico() {
+        List<RodadaDTO> lista = new ArrayList<>();
+        for (ResultadoRodada r : historicoRepository.findTop5ByOrderByDataHoraDescIdDesc()) {
+            lista.add(new RodadaDTO(
+                    r.getResultado(),
+                    r.getPontuacaoJogador(),
+                    r.getPontuacaoDealer(),
+                    r.getDataHora()));
+        }
+        return lista;
     }
 
     // Mostra a 1a carta do dealer e esconde as demais (carta com valor "?")

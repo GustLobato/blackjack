@@ -1,5 +1,6 @@
 package com.faculdade.blackjack.controller;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,13 @@ public class JogoController {
 
     @GetMapping("/estado")
     public EstadoJogo estado() {
+        return servico.estadoAtual();
+    }
+
+    // Apaga o historico de rodadas do banco e devolve o estado atualizado
+    @DeleteMapping("/historico")
+    public EstadoJogo limparHistorico() {
+        servico.limparHistorico();
         return servico.estadoAtual();
     }
 }

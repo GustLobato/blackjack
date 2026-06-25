@@ -1,6 +1,6 @@
 // Mostra um historico simples das ultimas rodadas (ganhou / perdeu / empate)
 
-function Historico({ historico }) {
+function Historico({ historico, onLimpar }) {
   // Se ainda nao tem nenhuma rodada terminada, nao mostra nada
   if (!historico || historico.length === 0) {
     return null;
@@ -19,6 +19,9 @@ function Historico({ historico }) {
           </li>
         ))}
       </ul>
+      <button className="btn-limpar" onClick={onLimpar}>
+        Limpar histórico
+      </button>
     </div>
   );
 }

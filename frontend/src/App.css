@@ -257,3 +257,21 @@ body {
   font-variant-numeric: tabular-nums;
   opacity: 0.85;
 }
+
+/* ---------- 10. Botao de limpar historico ---------- */
+.btn-limpar {
+  margin-top: 12px;
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(192, 57, 43, 0.85);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: filter 0.1s ease;
+}
+.btn-limpar:hover {
+  filter: brightness(1.12);
+}

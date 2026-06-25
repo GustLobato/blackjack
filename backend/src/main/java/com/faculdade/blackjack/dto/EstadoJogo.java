@@ -3,7 +3,6 @@ package com.faculdade.blackjack.dto;
 import java.util.List;
 
 import com.faculdade.blackjack.model.Carta;
-import com.faculdade.blackjack.model.ResultadoRodada;
 
 // Objeto que e enviado como resposta (JSON) para o front-end.
 // Reune tudo que a tela precisa para se desenhar.
@@ -15,7 +14,7 @@ public class EstadoJogo {
     private int pontuacaoDealer;
     private String status;   // EM_ANDAMENTO, SEM_JOGO, JOGADOR_VENCEU, ...
     private String mensagem; // texto final mostrado quando a rodada termina
-    private List<ResultadoRodada> historico;
+    private List<RodadaDTO> historico; // vem do banco de dados
 
     public List<Carta> getCartasJogador() {
         return cartasJogador;
@@ -65,11 +64,11 @@ public class EstadoJogo {
         this.mensagem = mensagem;
     }
 
-    public List<ResultadoRodada> getHistorico() {
+    public List<RodadaDTO> getHistorico() {
         return historico;
     }
 
-    public void setHistorico(List<ResultadoRodada> historico) {
+    public void setHistorico(List<RodadaDTO> historico) {
         this.historico = historico;
     }
 }

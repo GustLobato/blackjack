@@ -70,7 +70,12 @@ function App() {
       )}
 
       {/* Historico das ultimas rodadas, embaixo */}
-      {jogo && <Historico historico={jogo.historico} />}
+      {jogo && (
+        <Historico
+          historico={jogo.historico}
+          onLimpar={() => executar(api.limparHistorico)}
+        />
+      )}
     </div>
   );
 }

@@ -30,3 +30,8 @@ export async function parar() {
 export async function estado() {
   return chamar("/estado", "GET");
 }
+
+// Apaga o historico de rodadas (no banco de dados)
+export async function limparHistorico() {
+  return chamar("/historico", "DELETE");
+}
